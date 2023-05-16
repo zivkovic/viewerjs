@@ -1,5 +1,5 @@
 import DEFAULTS from './defaults';
-import TEMPLATE from './template';
+import viewerTemplate from './template';
 import render from './render';
 import events from './events';
 import handlers from './handlers';
@@ -199,7 +199,7 @@ class Viewer {
     const parent = element.parentNode;
     const template = document.createElement('div');
 
-    template.innerHTML = TEMPLATE;
+    template.innerHTML = viewerTemplate(options.navbar);
 
     const viewer = template.querySelector(`.${NAMESPACE}-container`);
     const title = viewer.querySelector(`.${NAMESPACE}-title`);
@@ -225,7 +225,9 @@ class Viewer {
     addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title)
       ? options.title[0]
       : options.title));
-    addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
+    if (options.navbar) {
+      addClass(navbar, getResponsiveClass(options.navbar));
+    }
     toggleClass(button, CLASS_HIDE, !options.button);
 
     if (options.keyboard) {

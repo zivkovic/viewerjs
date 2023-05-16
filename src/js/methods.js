@@ -960,7 +960,9 @@ export default {
     addClass(this.button, CLASS_FULLSCREEN_EXIT);
 
     if (options.transition) {
-      removeClass(list, CLASS_TRANSITION);
+      if (options.navbar) {
+        removeClass(list, CLASS_TRANSITION);
+      }
 
       if (this.viewed) {
         removeClass(image, CLASS_TRANSITION);
@@ -990,7 +992,9 @@ export default {
           if (options.transition) {
             setTimeout(() => {
               addClass(image, CLASS_TRANSITION);
-              addClass(list, CLASS_TRANSITION);
+              if (options.navbar) {
+                addClass(list, CLASS_TRANSITION);
+              }
             }, 0);
           }
         });
@@ -1018,7 +1022,9 @@ export default {
     removeClass(this.button, CLASS_FULLSCREEN_EXIT);
 
     if (options.transition) {
-      removeClass(list, CLASS_TRANSITION);
+      if (options.navbar) {
+        removeClass(list, CLASS_TRANSITION);
+      }
 
       if (this.viewed) {
         removeClass(image, CLASS_TRANSITION);
@@ -1047,7 +1053,9 @@ export default {
           if (options.transition) {
             setTimeout(() => {
               addClass(image, CLASS_TRANSITION);
-              addClass(list, CLASS_TRANSITION);
+              if (options.navbar) {
+                addClass(list, CLASS_TRANSITION);
+              }
             }, 0);
           }
         });
@@ -1176,7 +1184,7 @@ export default {
 
         if (image && img) {
           if (
-            image.src !== img.src
+            image.src !== (img.src || img.dataset.originalUrl)
 
             // Title changed (#408)
             || image.alt !== img.alt
@@ -1188,9 +1196,11 @@ export default {
         }
       });
 
-      setStyle(this.list, {
-        width: 'auto',
-      });
+      if (options.navbar) {
+        setStyle(this.list, {
+          width: 'auto',
+        });
+      }
 
       this.initList();
 

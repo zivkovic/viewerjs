@@ -78,7 +78,9 @@ export default {
     const items = [];
 
     // initList may be called in this.update, so should keep idempotent
-    list.innerHTML = '';
+    if (options.navbar) {
+      list.innerHTML = '';
+    }
 
     forEach(this.images, (image, index) => {
       const { src } = image;
@@ -97,9 +99,11 @@ export default {
           }
         });
 
-        if (options.navbar) {
-          img.src = src || url;
-        }
+        // Must be before img.src = ''
+        img.loading = 'lazy';
+
+        // Must not comment this, as otherwise its index calculation fails.
+        img.src = src || url;
 
         img.alt = alt;
         img.setAttribute('data-original-url', url || src);
@@ -112,7 +116,9 @@ export default {
         }
 
         item.appendChild(img);
-        list.appendChild(item);
+        if (options.navbar) {
+          list.appendChild(item);
+        }
         items.push(item);
       }
     });
@@ -162,9 +168,12 @@ export default {
   },
 
   renderList() {
-    const { index } = this;
-    const item = this.items[index];
+    const { index, options } = this;
+    if (!options.navbar) {
+      return;
+    }
 
+    const item = this.items[index];
     if (!item) {
       return;
     }
@@ -183,7 +192,10 @@ export default {
   },
 
   resetList() {
-    const { list } = this;
+    const { options, list } = this;
+    if (!options.navbar) {
+      return;
+    }
 
     list.innerHTML = '';
     removeClass(list, CLASS_TRANSITION);
